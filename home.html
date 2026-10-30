@@ -1,0 +1,162 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+<section class="hero">
+  <div class="hero-copy">
+    <p class="eyebrow"><span>Maison</span> — Lahore</p>
+    <h1 class="hero-title">{{ site.brand_name }}</h1>
+    <p class="hero-sub">{{ site.tagline }} A small atelier of bridal, evening and everyday pieces, made one at a time.</p>
+    <div class="hero-actions">
+      <a class="btn btn-solid" href="#collections">Explore the collections</a>
+      <a class="link-arrow" href="{% url 'core:contact' %}">Book a fitting <span aria-hidden="true">→</span></a>
+    </div>
+  </div>
+
+  <div class="hero-visual" data-hero>
+    {% for slide in heroes %}
+      <figure class="hero-slide{% if forloop.first %} is-active{% endif %}" data-slide>
+        <div class="hero-media">
+          <img src="{{ slide.image.url }}" alt="{{ slide.title }}">
+        </div>
+        <figcaption class="hero-caption">
+          <p class="hero-kicker">{{ slide.kicker }}</p>
+          <p class="hero-line">{{ slide.title }}</p>
+          <a class="link-arrow is-light" href="{{ slide.cta_url }}">{{ slide.cta_label }} <span aria-hidden="true">→</span></a>
+        </figcaption>
+      </figure>
+    {% empty %}
+      <div class="hero-placeholder">
+        <p>Add hero slides in the studio admin.</p>
+      </div>
+    {% endfor %}
+
+    <div class="hero-dots" data-hero-dots>
+      {% for slide in heroes %}
+        <button type="button" class="{% if forloop.first %}is-active{% endif %}" data-hero-dot="{{ forloop.counter0 }}" aria-label="Show slide {{ forloop.counter }}">
+          <i></i>
+        </button>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    {% for i in "12" %}
+      <span>{{ site.announcement }}</span>
+      <span class="marquee-dot">✦</span>
+    {% endfor %}
+  </div>
+</div>
+
+<section class="section collections" id="collections">
+  <div class="section-head">
+    <p class="eyebrow" data-reveal><span>01</span> Collections</p>
+    <h2 class="display" data-reveal>Three ways<br><em>to dress.</em></h2>
+  </div>
+
+  <div class="collection-grid">
+    {% for collection in collections %}
+      <a class="collection-card" href="{% url 'core:collection' collection.slug %}" data-reveal style="--d:{{ forloop.counter0 }}00ms">
+        <div class="media ratio-4x5">
+          <img src="{{ collection.cover_image.url }}" alt="{{ collection.name }}" loading="lazy">
+        </div>
+        <div class="collection-meta">
+          <span class="index">0{{ forloop.counter }}</span>
+          <h3>{{ collection.name }}</h3>
+          <p>{{ collection.description }}</p>
+          <span class="link-arrow">View collection <span aria-hidden="true">→</span></span>
+        </div>
+      </a>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="section looks" id="looks">
+  <div class="section-head section-head--split">
+    <p class="eyebrow" data-reveal><span>02</span> Selected looks</p>
+    <h2 class="display" data-reveal>The season,<br><em>quietly.</em></h2>
+    <p class="lede" data-reveal>A short edit from the atelier floor — each piece cut, fitted and finished in the same room. Select a look for fabric and craft notes.</p>
+  </div>
+
+  <div class="look-grid">
+    {% for look in looks %}
+      {% include "core/_look_card.html" %}
+    {% endfor %}
+  </div>
+</section>
+
+<section class="section atelier" id="atelier">
+  <div class="atelier-media reveal-clip" data-reveal>
+    {% if site.about_image %}
+      <div class="media ratio-4x5">
+        <img src="{{ site.about_image.url }}" alt="{{ site.about_caption }}" loading="lazy" data-parallax>
+      </div>
+      <p class="caption">{{ site.about_caption }}</p>
+    {% endif %}
+  </div>
+
+  <div class="atelier-copy">
+    <p class="eyebrow" data-reveal><span>03</span> {{ site.about_kicker }}</p>
+    <h2 class="display" data-reveal>{{ site.about_title }}</h2>
+    <div class="lede prose" data-reveal>{{ site.about_text|linebreaks }}</div>
+
+    <ol class="craft-list">
+      {% for craft in crafts %}
+        <li data-reveal style="--d:{{ forloop.counter0 }}50ms">
+          <span class="craft-num">0{{ forloop.counter }}</span>
+          <div>
+            <h3>{{ craft.title }}</h3>
+            <p>{{ craft.text }}</p>
+          </div>
+        </li>
+      {% endfor %}
+    </ol>
+
+    <div class="stats" data-reveal>
+      <div class="stat">
+        <span class="stat-value">{{ site.stat_years_value }}</span>
+        <span class="stat-label">{{ site.stat_years_label }}</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value">{{ site.stat_pieces_value }}</span>
+        <span class="stat-label">{{ site.stat_pieces_label }}</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value">{{ site.stat_hands_value }}</span>
+        <span class="stat-label">{{ site.stat_hands_label }}</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% if testimonials %}
+<section class="section quotes">
+  <p class="eyebrow eyebrow--center" data-reveal><span>04</span> In their words</p>
+  <div class="quote-grid">
+    {% for testimonial in testimonials %}
+      <figure class="quote" data-reveal style="--d:{{ forloop.counter0 }}20ms">
+        <blockquote>{{ testimonial.quote }}</blockquote>
+        <figcaption>
+          <span>{{ testimonial.author }}</span>
+          <em>{{ testimonial.detail }}</em>
+        </figcaption>
+      </figure>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+<section class="cta-band">
+  <div class="cta-inner">
+    <p class="eyebrow is-light" data-reveal><span>05</span> {{ site.contact_kicker }}</p>
+    <h2 class="display" data-reveal>{{ site.contact_title }}</h2>
+    <p class="lede" data-reveal>{{ site.contact_text }}</p>
+    <div class="cta-actions" data-reveal>
+      <a class="btn btn-ivory" href="{% url 'core:contact' %}">Write to the atelier</a>
+      <a class="cta-mail" href="mailto:{{ site.contact_email }}">{{ site.contact_email }}</a>
+    </div>
+  </div>
+  <p class="cta-watermark" aria-hidden="true">{{ site.brand_name }}</p>
+</section>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends "core/base.html" %}
+
+{% block title %}{{ look.name }} — {{ site.brand_name }}{% endblock %}
+{% block description %}{{ look.description|truncatewords:30 }}{% endblock %}
+
+{% block content %}
+<section class="look-page">
+  <figure class="look-stage media" data-zoom tabindex="0" role="button" aria-label="Zoom the photograph of {{ look.name }}" aria-pressed="false">
+    <img src="{{ look.image.url }}" alt="{{ look.name }}">
+    <span class="zoom-hint">Click to zoom</span>
+  </figure>
+
+  <div class="look-info">
+    <p class="eyebrow"><a href="{% url 'core:collection' look.collection.slug %}">{{ look.collection.name }}</a></p>
+    <h1 class="display">{{ look.name }}</h1>
+    <p class="look-label">{{ look.label }}</p>
+    <p class="lede">{{ look.description }}</p>
+    <p class="look-detail">{{ look.detail|linebreaksbr }}</p>
+    <p class="look-price">{{ look.price_label }}</p>
+    <a class="btn btn-solid" href="{% url 'core:contact' %}?look={{ look.name|urlencode }}">Enquire about this look</a>
+
+    {% if look.images.all %}
+      <div class="look-gallery">
+        {% for extra in look.images.all %}
+          <figure class="media">
+            <img src="{{ extra.image.url }}" alt="{{ extra.caption }}" loading="lazy">
+          </figure>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <p class="look-back"><a class="link-arrow" href="{% url 'core:collection' look.collection.slug %}"><span aria-hidden="true">←</span> Back to {{ look.collection.name }}</a></p>
+  </div>
+</section>
+
+{% if more %}
+<section class="section more-looks">
+  <div class="section-head">
+    <p class="eyebrow"><span>Also in</span> {{ look.collection.name }}</p>
+  </div>
+  <div class="look-grid look-grid--uniform">
+    {% for look in more %}
+      {% include "core/_look_card.html" %}
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+{% endblock %}

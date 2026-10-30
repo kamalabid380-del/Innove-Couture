@@ -1,0 +1,34 @@
+{% extends "core/base.html" %}
+
+{% block title %}{{ collection.name }} — {{ site.brand_name }}{% endblock %}
+{% block description %}{{ collection.description }}{% endblock %}
+
+{% block content %}
+<section class="collection-page">
+  <header class="page-head">
+    <p class="eyebrow"><span>Collection</span> — {{ looks|length }} looks</p>
+    <h1 class="display">{{ collection.name }}</h1>
+    <p class="lede">{{ collection.description }}</p>
+  </header>
+
+  <div class="reveal-clip" data-reveal>
+    <div class="collection-cover media">
+      <img src="{{ collection.cover_image.url }}" alt="{{ collection.name }}">
+    </div>
+  </div>
+
+  <div class="look-grid look-grid--uniform">
+    {% for look in looks %}
+      {% include "core/_look_card.html" %}
+    {% empty %}
+      <p class="lede">New looks are being finished in the atelier — check back soon.</p>
+    {% endfor %}
+  </div>
+
+  <nav class="collection-switch" aria-label="Collections">
+    {% for item in collections %}
+      <a href="{% url 'core:collection' item.slug %}"{% if item.pk == collection.pk %} class="is-current" aria-current="page"{% endif %}>{{ item.name }}</a>
+    {% endfor %}
+  </nav>
+</section>
+{% endblock %}

@@ -1,0 +1,68 @@
+{% extends "core/base.html" %}
+
+{% block title %}Enquiries — {{ site.brand_name }}{% endblock %}
+
+{% block content %}
+<section class="contact-page">
+  <div class="contact-info">
+    <p class="eyebrow"><span>{{ site.contact_kicker }}</span></p>
+    <h1 class="display">{{ site.contact_title }}</h1>
+    <p class="lede">{{ site.contact_text }}</p>
+
+    <dl class="contact-list">
+      <div>
+        <dt>Email</dt>
+        <dd><a href="mailto:{{ site.contact_email }}">{{ site.contact_email }}</a></dd>
+      </div>
+      <div>
+        <dt>Phone</dt>
+        <dd><a href="tel:{{ site.contact_phone }}">{{ site.contact_phone }}</a></dd>
+      </div>
+      <div>
+        <dt>Atelier</dt>
+        <dd>{{ site.contact_address }}</dd>
+      </div>
+      <div>
+        <dt>Hours</dt>
+        <dd>{{ site.contact_hours }}</dd>
+      </div>
+    </dl>
+
+    <div class="contact-social">
+      {% if site.instagram_url %}<a href="{{ site.instagram_url }}" target="_blank" rel="noopener">Instagram</a>{% endif %}
+      {% if site.pinterest_url %}<a href="{{ site.pinterest_url }}" target="_blank" rel="noopener">Pinterest</a>{% endif %}
+      {% if site.whatsapp_url %}<a href="{{ site.whatsapp_url }}" target="_blank" rel="noopener">WhatsApp</a>{% endif %}
+    </div>
+  </div>
+
+  <div class="contact-form-wrap" id="enquiry">
+    {% if look %}
+      <p class="enquiring-about">Enquiring about <em>{{ look }}</em></p>
+    {% endif %}
+
+    {% if messages %}
+      {% for message in messages %}
+        <p class="form-success" role="status">{{ message }}</p>
+      {% endfor %}
+    {% endif %}
+
+    <form method="post" class="enquiry-form" novalidate>
+      {% csrf_token %}
+      <input type="hidden" name="look" value="{{ look }}">
+
+      {% for field in form %}
+        <div class="field{% if field.errors %} has-error{% endif %}">
+          <label for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %}<span class="req" aria-hidden="true">*</span>{% endif %}</label>
+          {{ field }}
+          {% for error in field.errors %}
+            <p class="field-error">{{ error }}</p>
+          {% endfor %}
+        </div>
+      {% endfor %}
+
+      <button class="btn btn-solid" type="submit">Send enquiry</button>
+      <p class="form-note">We reply within two working days.</p>
+    </form>
+  </div>
+</section>
+{% endblock %}

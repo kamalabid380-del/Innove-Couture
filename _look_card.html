@@ -1,0 +1,13 @@
+<a class="look-card look-card--{{ forloop.counter }}" href="{% url 'core:look' look.slug %}" data-reveal style="--d:{{ forloop.counter0 }}50ms">
+  <div class="media">
+    <img src="{{ look.image.url }}" alt="{{ look.name }}" loading="lazy">
+    <span class="media-tag">{{ look.label }}</span>
+  </div>
+  <div class="look-meta">
+    <div>
+      <h3>{{ look.name }}</h3>
+      <p>{{ look.collection.name }}</p>
+    </div>
+    <span class="look-index">0{{ forloop.counter }}</span>
+  </div>
+</a>
