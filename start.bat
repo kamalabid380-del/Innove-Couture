@@ -1,8 +1,6 @@
 @echo off
 title Innove Couture
 cd /d "%~dp0"
-set "PY=C:\Users\ABID\AppData\Local\Programs\Python\Python313\python.exe"
-if not exist "%PY%" set "PY=python"
 
 set "PAGE=%~1"
 if "%PAGE%"=="" set "PAGE=/"
@@ -10,7 +8,7 @@ if "%PAGE%"=="" set "PAGE=/"
 rem Start the local server only if it is not already running
 curl -s -o NUL -m 2 http://127.0.0.1:8000/ >nul 2>&1
 if errorlevel 1 (
-  start "Innove Couture Server" /min cmd /c "%PY% manage.py runserver 127.0.0.1:8000 > server.log 2>&1"
+  wscript //nologo "%~dp0start-hidden.vbs"
   for /l %%i in (1,1,30) do (
     curl -s -o NUL -m 1 http://127.0.0.1:8000/ >nul 2>&1
     if not errorlevel 1 goto ready
